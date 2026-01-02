@@ -16,7 +16,7 @@ public abstract class AudioItem {
         if(year<=0){
             throw new IllegalArgumentException("Invalid year!");
         }
-        if(durationInSeconds<=0){
+        if(durationInSeconds<0){
             throw new IllegalArgumentException("The duration must be positive!");
         }
 

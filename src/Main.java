@@ -122,8 +122,9 @@ public class Main {
         System.out.print("Genre: ");
         String genre = scanner.nextLine();
 
-        System.out.print("Duration (seconds): ");
-        int duration = Integer.parseInt(scanner.nextLine());
+        System.out.print("Duration (mm:ss or seconds): ");
+        String durationInput = scanner.nextLine();
+        int duration = parseDuration(durationInput);
 
         System.out.print("Category: ");
         String category = scanner.nextLine();
@@ -241,8 +242,8 @@ public class Main {
         if (album != null) {
             System.out.print("Song Title: ");
             String sTitle = scanner.nextLine();
-            System.out.print("Duration in seconds: ");
-            int sDuration = Integer.parseInt(scanner.nextLine());
+            System.out.print("Duration (mm:ss or seconds): ");
+            int sDuration = parseDuration(scanner.nextLine());
 
             Song newSong = new Song(sTitle, album.getGenre(), sDuration, album.getCategory(), album.getAuthor(), album.getYear(), album.getTitle());
             album.addSong(newSong);
@@ -280,6 +281,21 @@ public class Main {
             }
         } else {
             System.out.println("Playlist not found.");
+        }
+    }
+
+    private static int parseDuration(String input) {
+        try {
+            if (input.contains(":")) {
+                String[] parts = input.split(":");
+                int minutes = Integer.parseInt(parts[0]);
+                int seconds = Integer.parseInt(parts[1]);
+                return (minutes * 60) + seconds;
+            }
+        return Integer.parseInt(input);
+    }catch(Exception e) {
+            System.out.println("Invalid duration format! Defaulting to 0.");
+            return 0;
         }
     }
 }
