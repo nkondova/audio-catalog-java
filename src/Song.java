@@ -12,7 +12,7 @@ public class Song extends AudioItem{
 
     @Override
     public String toString(){
-        return super.toString() +" | Album" + albumName;
+        return super.toString() +" | Album " + albumName;
     }
 
 

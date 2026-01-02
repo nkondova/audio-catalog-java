@@ -72,6 +72,15 @@ public class AudioCatalog {
         return foundItems;
     }
 
+    public Album findAlbumByTitle(String title) {
+        for (AudioItem item : allItems) {
+            if (item instanceof Album && item.getTitle().equalsIgnoreCase(title)) {
+                return (Album) item;
+            }
+        }
+        return null;
+    }
+
     public void createPlaylist(Playlist playlist){
         playlists.add(playlist);
     }
@@ -84,6 +93,7 @@ public class AudioCatalog {
         }
         return null;
     }
+
 
     public void sortByTitle(){
         allItems.sort(new Comparator<AudioItem>() {

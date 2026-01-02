@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.List;
 
 public class Main {
 
@@ -37,18 +38,38 @@ public class Main {
                     break;
 
                 case 6:
+                    filterByYear(scanner, catalog);
+                    break;
+
+                case 7:
                     catalog.sortByTitle();
                     System.out.println("Catalog sorted by title.");
                     break;
 
-                case 7:
+                case 8:
                     catalog.saveToFile("catalog.txt");
                     System.out.println("Catalog saved.");
                     break;
 
-                case 8:
+                case 9:
                     catalog.loadFromFile("catalog.txt");
                     System.out.println("Catalog loaded.");
+                    break;
+
+                case 10:
+                    createPlaylist(scanner, catalog);
+                    break;
+
+                case 11:
+                    addItemToPlaylist(scanner, catalog);
+                    break;
+
+                case 12:
+                    createAlbum(scanner, catalog);
+                    break;
+
+                case 13:
+                    addSongToAlbum(scanner, catalog);
                     break;
 
                 case 0:
@@ -64,7 +85,6 @@ public class Main {
         scanner.close();
     }
 
-    // ---------------- MENU ----------------
 
     private static void printMenu() {
         System.out.println("\n--- AUDIO CATALOG ---");
@@ -73,13 +93,18 @@ public class Main {
         System.out.println("3. Search by title");
         System.out.println("4. Search by author");
         System.out.println("5. Filter by genre");
-        System.out.println("6. Sort by title");
-        System.out.println("7. Save catalog to file");
-        System.out.println("8. Load catalog from file");
+        System.out.println("6. Filter by year");
+        System.out.println("7. Sort by title");
+        System.out.println("8. Save catalog to file");
+        System.out.println("9. Load catalog from file");
+        System.out.println("10. Create a playlist");
+        System.out.println("11. Add to playlist");
+        System.out.println("12. Create an empty Album");
+        System.out.println("13. Add song to existing Album");
         System.out.println("0. Exit");
     }
 
-    // ---------------- ADD ITEM ----------------
+
 
     private static void addAudioItem(Scanner scanner, AudioCatalog catalog) {
 
@@ -90,7 +115,7 @@ public class Main {
 
         int type = Integer.parseInt(scanner.nextLine());
 
-        // Общи полета
+
         System.out.print("Title: ");
         String title = scanner.nextLine();
 
@@ -139,7 +164,6 @@ public class Main {
         System.out.println("Audio item added successfully.");
     }
 
-    // ---------------- REMOVE ----------------
 
     private static void removeAudioItem(Scanner scanner, AudioCatalog catalog) {
         System.out.print("Enter title to remove: ");
@@ -154,7 +178,6 @@ public class Main {
         System.out.println("Item not found.");
     }
 
-    // ---------------- SEARCH / FILTER ----------------
 
     private static void searchByTitle(Scanner scanner, AudioCatalog catalog) {
         System.out.print("Enter title: ");
@@ -180,6 +203,83 @@ public class Main {
 
         for (AudioItem item : catalog.filterByGenre(genre)) {
             System.out.println(item);
+        }
+    }
+
+    private static void filterByYear(Scanner scanner, AudioCatalog catalog){
+        System.out.println("Enter year: ");
+        int year = Integer.parseInt(scanner.nextLine());
+
+        for(AudioItem item : catalog.filterByYear(year)){
+            System.out.println(item);
+        }
+
+    }
+
+
+    private static void createAlbum(Scanner scanner, AudioCatalog catalog) {
+        System.out.print("Album Title: ");
+        String title = scanner.nextLine();
+        System.out.print("Genre: ");
+        String genre = scanner.nextLine();
+        System.out.print("Author: ");
+        String author = scanner.nextLine();
+        System.out.print("Year: ");
+        int year = Integer.parseInt(scanner.nextLine());
+
+        Album newAlbum = new Album(title, genre, 0, "Music", author, year, title);
+        catalog.addItem(newAlbum);
+        System.out.println("Empty album '" + title + "' created successfully.");
+    }
+
+    private static void addSongToAlbum(Scanner scanner, AudioCatalog catalog) {
+        System.out.print("Enter Album Title to search: ");
+        String albumTitle = scanner.nextLine();
+
+        Album album = catalog.findAlbumByTitle(albumTitle);
+
+        if (album != null) {
+            System.out.print("Song Title: ");
+            String sTitle = scanner.nextLine();
+            System.out.print("Duration in seconds: ");
+            int sDuration = Integer.parseInt(scanner.nextLine());
+
+            Song newSong = new Song(sTitle, album.getGenre(), sDuration, album.getCategory(), album.getAuthor(), album.getYear(), album.getTitle());
+            album.addSong(newSong);
+            System.out.println("Song '" + sTitle + "' added to album '" + albumTitle + "'.");
+        } else {
+            System.out.println("Album not found.");
+        }
+    }
+
+    private static void createPlaylist(Scanner scanner, AudioCatalog catalog) {
+        System.out.print("Enter playlist name: ");
+        String playlistName = scanner.nextLine();
+
+        catalog.createPlaylist(new Playlist(playlistName));
+        System.out.println("Playlist '" + playlistName + "' created successfully.");
+    }
+
+    private static void addItemToPlaylist(Scanner scanner, AudioCatalog catalog) {
+        System.out.print("Enter playlist name: ");
+        String pName = scanner.nextLine();
+
+        Playlist pl = catalog.findPlaylistByName(pName);
+
+        if (pl != null) {
+            System.out.print("Enter item title to add to playlist: ");
+            String itemTitle = scanner.nextLine();
+
+            List<AudioItem> foundItems = catalog.searchByTitle(itemTitle);
+
+            if (!foundItems.isEmpty()) {
+                pl.addItem(foundItems.get(0));
+                System.out.println("Item added to playlist '" + pName + "'.");
+            } else {
+                System.out.println("Audio item not found in catalog.");
+            }
+        } else {
+            System.out.println("Playlist not found.");
         }
     }
 }
