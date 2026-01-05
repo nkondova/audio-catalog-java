@@ -64,14 +64,6 @@ public class Main {
                     addItemToPlaylist(scanner, catalog);
                     break;
 
-                case 12:
-                    createAlbum(scanner, catalog);
-                    break;
-
-                case 13:
-                    addSongToAlbum(scanner, catalog);
-                    break;
-
                 case 0:
                     running = false;
                     System.out.println("Goodbye!");
@@ -99,8 +91,6 @@ public class Main {
         System.out.println("9. Load catalog from file");
         System.out.println("10. Create a playlist");
         System.out.println("11. Add to playlist");
-        System.out.println("12. Create an empty Album");
-        System.out.println("13. Add song to existing Album");
         System.out.println("0. Exit");
     }
 
@@ -112,6 +102,7 @@ public class Main {
         System.out.println("1. Song");
         System.out.println("2. Podcast");
         System.out.println("3. Audiobook");
+        System.out.println("4. Album");
 
         int type = Integer.parseInt(scanner.nextLine());
 
@@ -154,6 +145,12 @@ public class Main {
                 System.out.print("Narrator: ");
                 String narrator = scanner.nextLine();
                 item = new AudioBook(title, genre, duration, category, author, year, narrator);
+                break;
+
+            case 4:
+                System.out.print("Number of songs: ");
+                int songs = Integer.parseInt(scanner.nextLine());
+                item = new Album(title, genre, duration, category, author, year, songs);
                 break;
 
             default:
@@ -215,42 +212,6 @@ public class Main {
             System.out.println(item);
         }
 
-    }
-
-
-    private static void createAlbum(Scanner scanner, AudioCatalog catalog) {
-        System.out.print("Album Title: ");
-        String title = scanner.nextLine();
-        System.out.print("Genre: ");
-        String genre = scanner.nextLine();
-        System.out.print("Author: ");
-        String author = scanner.nextLine();
-        System.out.print("Year: ");
-        int year = Integer.parseInt(scanner.nextLine());
-
-        Album newAlbum = new Album(title, genre, 0, "Music", author, year, title);
-        catalog.addItem(newAlbum);
-        System.out.println("Empty album '" + title + "' created successfully.");
-    }
-
-    private static void addSongToAlbum(Scanner scanner, AudioCatalog catalog) {
-        System.out.print("Enter Album Title to search: ");
-        String albumTitle = scanner.nextLine();
-
-        Album album = catalog.findAlbumByTitle(albumTitle);
-
-        if (album != null) {
-            System.out.print("Song Title: ");
-            String sTitle = scanner.nextLine();
-            System.out.print("Duration (mm:ss or seconds): ");
-            int sDuration = parseDuration(scanner.nextLine());
-
-            Song newSong = new Song(sTitle, album.getGenre(), sDuration, album.getCategory(), album.getAuthor(), album.getYear(), album.getTitle());
-            album.addSong(newSong);
-            System.out.println("Song '" + sTitle + "' added to album '" + albumTitle + "'.");
-        } else {
-            System.out.println("Album not found.");
-        }
     }
 
     private static void createPlaylist(Scanner scanner, AudioCatalog catalog) {

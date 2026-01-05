@@ -1,26 +1,18 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class Album extends AudioItem {
-    private final List<Song> songs;
+    int numberOfSongs;
 
-    public Album(String title, String genre, int durationInSeconds, String category, String author, int year, String name){
+    public Album(String title, String genre, int durationInSeconds, String category, String author, int year, int numberOfSongs){
         super(title, genre, durationInSeconds, category, author, year);
-        this.songs = new ArrayList<Song>();
+        this.numberOfSongs = numberOfSongs;
     }
 
-    public List<Song> getSongs(){
-        return songs;
+    public int getNumberOfSongs(){
+        return numberOfSongs;
     }
-    public void addSong(Song song){
-        songs.add(song);
-    }
+
 
     @Override
     public String toString() {
-        return String.format("Album: %s | Artist: %s | Tracks: %d | %s",
-                getTitle(), getAuthor(), songs.size(), super.toString());
+        return "Album: " + super.toString() + "Number of songs: " + numberOfSongs;
     }
-
-
 }

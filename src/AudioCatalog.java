@@ -72,15 +72,6 @@ public class AudioCatalog {
         return foundItems;
     }
 
-    public Album findAlbumByTitle(String title) {
-        for (AudioItem item : allItems) {
-            if (item instanceof Album && item.getTitle().equalsIgnoreCase(title)) {
-                return (Album) item;
-            }
-        }
-        return null;
-    }
-
     public void createPlaylist(Playlist playlist){
         playlists.add(playlist);
     }
@@ -121,8 +112,7 @@ public class AudioCatalog {
                                     song.getYear() + ";" +
                                     song.getAlbumName()
                     );
-                }
-                else if (item instanceof Podcast) {
+                } else if (item instanceof Podcast) {
                     Podcast podcast = (Podcast) item;
                     writer.write(
                             "PODCAST;" +
@@ -134,8 +124,7 @@ public class AudioCatalog {
                                     podcast.getYear() + ";" +
                                     podcast.getEpisodeNumber()
                     );
-                }
-                else if (item instanceof AudioBook) {
+                } else if (item instanceof AudioBook) {
                     AudioBook book = (AudioBook) item;
                     writer.write(
                             "AUDIOBOOK;" +
@@ -147,8 +136,20 @@ public class AudioCatalog {
                                     book.getYear() + ";" +
                                     book.getNarrator()
                     );
-                }
+                } else if (item instanceof Album) {
+                    Album album = (Album) item;
+                    writer.write(
+                            "ALBUM;" +
+                                    album.getTitle() + ";" +
+                                    album.getGenre() + ";" +
+                                    album.getDurationInSeconds() + ";" +
+                                    album.getCategory() + ";" +
+                                    album.getAuthor() + ";" +
+                                    album.getYear() + ";" +
+                                    album.getNumberOfSongs()
+                    );
 
+                }
                 writer.newLine();
             }
 
@@ -196,6 +197,13 @@ public class AudioCatalog {
                                 title, genre, duration, category, author, year, narrator
                         ));
                         break;
+
+                    case "ALBUM":
+                        int songs = Integer.parseInt(parts[7]);
+                        allItems.add(new Album(
+                                title, genre, duration, category, author, year, songs
+                        ));
+                        break;
                 }
             }
 
@@ -203,9 +211,5 @@ public class AudioCatalog {
             System.out.println("Error while reading file: " + e.getMessage());
         }
     }
-
-
-
-
 
 }
