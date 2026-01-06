@@ -1,12 +1,12 @@
 public abstract class AudioItem {
     private final String title;
-    private final String genre;
+    private final Genre genre;
     private final int durationInSeconds;
     private final String category;
     private final String author;
     private final int year;
 
-    protected AudioItem(String title, String genre, int durationInSeconds, String category, String author, int year){
+    protected AudioItem(String title, Genre genre, int durationInSeconds, String category, String author, int year){
         if(title == null || title.isBlank()){
             throw new IllegalArgumentException("Title cannot be empty");
         }
@@ -44,7 +44,7 @@ public abstract class AudioItem {
         return category;
     }
 
-    public String getGenre() {
+    public Genre getGenre() {
         return genre;
     }
 

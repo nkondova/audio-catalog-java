@@ -1,7 +1,7 @@
 public class AudioBook extends AudioItem {
     private String narrator;
 
-    public AudioBook(String title, String genre, int durationInSeconds, String category, String author, int year, String narrator){
+    public AudioBook(String title, Genre genre, int durationInSeconds, String category, String author, int year, String narrator){
         super(title, genre, durationInSeconds, category, author, year);
         this.narrator = narrator;
     }

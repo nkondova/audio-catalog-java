@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.List;
+import java.util.Arrays;
 
 public class Main {
 
@@ -97,6 +98,7 @@ public class Main {
 
 
     private static void addAudioItem(Scanner scanner, AudioCatalog catalog) {
+        try{
 
         System.out.println("Choose type:");
         System.out.println("1. Song");
@@ -110,8 +112,9 @@ public class Main {
         System.out.print("Title: ");
         String title = scanner.nextLine();
 
+        System.out.println("Available Genres: " + Arrays.toString(Genre.values()));
         System.out.print("Genre: ");
-        String genre = scanner.nextLine();
+        Genre genre = Genre.valueOf(scanner.nextLine().toUpperCase());
 
         System.out.print("Duration (mm:ss or seconds): ");
         String durationInput = scanner.nextLine();
@@ -160,6 +163,14 @@ public class Main {
 
         catalog.addItem(item);
         System.out.println("Audio item added successfully.");
+
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Invalid number format! Please enter numeric values where required.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("An unexpected error occurred: " + e.getMessage());
+        }
     }
 
 
@@ -196,11 +207,15 @@ public class Main {
     }
 
     private static void filterByGenre(Scanner scanner, AudioCatalog catalog) {
-        System.out.print("Enter genre: ");
-        String genre = scanner.nextLine();
+        try {
+            System.out.print("Enter genre: ");
+            Genre genre = Genre.valueOf(scanner.nextLine().toUpperCase().trim());
 
-        for (AudioItem item : catalog.filterByGenre(genre)) {
-            System.out.println(item);
+            for (AudioItem item : catalog.filterByGenre(genre)) {
+                System.out.println(item);
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid genre! Please try again.");
         }
     }
 

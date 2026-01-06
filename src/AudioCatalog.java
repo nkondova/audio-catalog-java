@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Comparator;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.BufferedReader;
@@ -48,11 +47,11 @@ public class AudioCatalog {
         return foundItems;
     }
 
-    public List<AudioItem> filterByGenre(String genre){
+    public List<AudioItem> filterByGenre(Genre genre){
         List<AudioItem> foundItems = new ArrayList<>();
 
         for(AudioItem item: allItems){
-            if(item.getGenre().equalsIgnoreCase(genre)){
+            if(item.getGenre() == genre){
                 foundItems.add(item);
             }
         }
@@ -87,12 +86,7 @@ public class AudioCatalog {
 
 
     public void sortByTitle(){
-        allItems.sort(new Comparator<AudioItem>() {
-            @Override
-            public int compare(AudioItem o1, AudioItem o2) {
-                return o1.getTitle().compareToIgnoreCase(o2.getTitle());
-            }
-        });
+        allItems.sort((o1, o2) -> o1.getTitle().compareToIgnoreCase(o2.getTitle()));
     }
 
     public void saveToFile(String filename) {
@@ -170,7 +164,7 @@ public class AudioCatalog {
 
                 String type = parts[0];
                 String title = parts[1];
-                String genre = parts[2];
+                Genre genre = Genre.valueOf(parts[2].toUpperCase().trim());
                 int duration = Integer.parseInt(parts[3]);
                 String category = parts[4];
                 String author = parts[5];
